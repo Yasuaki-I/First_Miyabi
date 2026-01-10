@@ -1,0 +1,56 @@
+# Economic Circuit Breaker Configuration
+# AGENTS.md v5.0 - Economic Governance Protocol
+# Reference: ai-course-content-generator BUDGET.yml
+
+# 月次予算設定（USD）
+monthly_budget_usd: 500
+
+# コスト監視しきい値
+thresholds:
+  warning: 0.8      # 警告レベル: 80%消費時に警告Issueを作成
+  emergency: 1.5    # 緊急レベル: 150%消費時にサーキットブレーカー発動
+
+# 緊急時の自動アクション
+emergency_actions:
+  # サーキットブレーカー発動時に無効化するワークフロー
+  disable_workflows:
+    - autonomous-agent.yml
+    - state-machine.yml
+    - weekly-kpi-report.yml
+
+# サービス別予算配分（参考値）
+service_budgets:
+  anthropic_api: 400    # Anthropic API（Claude）の月次予算
+  firebase: 100         # Firebase/GCPの月次予算
+  github_actions: 0     # GitHub Actions（無料枠内想定）
+
+# コスト最適化設定
+optimization:
+  # トークン使用量の監視
+  monitor_token_usage: true
+
+  # 高コストな操作の制限
+  rate_limits:
+    max_tokens_per_request: 4096
+    max_requests_per_hour: 100
+
+  # キャッシュ戦略
+  caching:
+    enabled: true
+    ttl_hours: 24
+
+# 通知設定
+notifications:
+  # 警告レベルでの通知先
+  warning_assignees:
+    - Yasuaki-I
+
+  # 緊急レベルでの通知先
+  emergency_assignees:
+    - Yasuaki-I
+
+  # 通知ラベル
+  labels:
+    warning: "💰経済-警告"
+    emergency: "💰経済-緊急停止"
+    system: "🤖AI-システム"
